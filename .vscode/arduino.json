@@ -2,5 +2,5 @@
     "board": "arduino:avr:mega",
     "configuration": "cpu=atmega2560",
     "sketch": "TensionMeasurementStencil.ino",
-    "port": "COM4"
+    "port": "COM6"
 }

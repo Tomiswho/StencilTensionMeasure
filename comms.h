@@ -1,21 +1,30 @@
 #ifndef COMMS_H_
 #define COMMS_H_
 
+#include "stdint.h"
+enum commands{
+    InvalidArgs,
+    Tare,
+    GetWeight,
+    MeasureTension,
+    SetPosition,
+    SetTension,
+    Home,
+    GetPosition,
+    NoCommand
+};
+
 class Communications{
     public:
-        enum commands{
-            InvalidArgs,
-            MoveUp,
-            MoveDown,
-            Tare
-        };
-        int32_t inputValue = 0;
+        int32_t arg1 = 0;
+        commands inputCommands = NoCommand;
+        bool commandisTrue = false;
     public:
-        void init(void);
-        bool checkCommand(void);
+        void init(int32_t baud);
+        void checkCommand(void);
         bool sendMessage(void);
     private:
         bool messageList(void);
-        commands commandList(String input);
+        bool commandList(String input);
 };
 #endif

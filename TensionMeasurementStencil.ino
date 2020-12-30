@@ -3,7 +3,7 @@
 StateMachine SM;
 
 void setup() {
-
+  SM.init();
 }
 
 void loop() {

@@ -1,20 +1,18 @@
 #include <Arduino.h>
 #include "comms.h"
-#include "config.h"
 
-
-void Communications::init(void){
-    Serial.begin(BAUD_RATE);
+void Communications::init(int32_t baud){
+    Serial.begin(baud);
 }
 
-bool Communications::checkCommand(void){
+void Communications::checkCommand(void){
     String incomingString;
     if(Serial.available() > 0){
         commandList(Serial.readStringUntil('\n'));
-        return true;
+        commandisTrue = true;
     }
     else{
-        return false;
+        commandisTrue = false;
     }
 }
 
@@ -26,28 +24,51 @@ bool Communications::messageList(void){
 
 }
 
-commands Communications::commandList(String input){
+bool Communications::commandList(String input){
     input.toLowerCase();
-    if(input == "up"){
-        Serial.println("Enter Steps");
+    if(input == "move"){
+        Serial.print("Enter Steps, ");
+        Serial.flush();
         while(Serial.available() == 0){
-            inputValue = Serial.parseInt();
+            arg1 = Serial.parseInt();
         }
-        return MoveUp;
-    }
-    else if (input == "down"){
-        Serial.println("Enter Steps");
-        while(Serial.available() == 0){
-            inputValue = Serial.parseInt();
-        }
-        return MoveDown;
+        inputCommands =  SetPosition;
+        return true;
     }
     else if (input == "tare"){
-        return Tare;
+        Serial.println("tare, ");
+        inputCommands = Tare;
+        return true;
+    }
+    else if(input == "get weight"){
+        Serial.println("get weight, ");
+        inputCommands = GetWeight;
+        return true;
+    }
+    else if(input == "measure tension"){
+        Serial.println("measure tension, ");
+        inputCommands = MeasureTension;
+        return true;
+    }
+    else if(input == "set position"){
+        Serial.println("set Position, ");
+        inputCommands = SetPosition;
+        return true;
+    }
+    else if(input == "home"){
+        Serial.println("Home, ");
+        inputCommands = Home;
+        return true;
+    }
+    else if(input == "position"){
+        Serial.println("position,");
+        inputCommands = GetPosition;
+        return true;
     }
     else{
-        Serial.println("Invalid Arguments");
-        return InvalidArgs;
+        Serial.println("Invalid Arguments, ");
+        inputCommands = InvalidArgs;
+        return false;
     }
 
 }

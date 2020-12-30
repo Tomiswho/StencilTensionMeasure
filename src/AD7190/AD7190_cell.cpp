@@ -86,8 +86,8 @@ void AD7190::tare()
     for (i = 0; i < tare_times + 1; i++)
     {
         temp = AD7190_ContinuousRead();
-        Serial.print("meas  ");
-        Serial.println(temp);
+        //Serial.print("meas  ");
+        //Serial.println(temp);
         delay(100);
 
         uint8_t status = AD7190_GetRegisterValue(AD7190_REG_STAT, 1, 1);
@@ -125,8 +125,8 @@ void AD7190::tare()
     Serial.println(i);
     */
     tare_offset = float(data_sum) / float(i);
-    //Serial.print("tare is");
-    //Serial.println(tare_offset);
+    Serial.print("tare is");
+    Serial.println(tare_offset);
     SPI.endTransaction();
     digitalWrite(cs, HIGH);
 }

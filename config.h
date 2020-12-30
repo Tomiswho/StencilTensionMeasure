@@ -1,6 +1,6 @@
 #define Major_version 1
 #define Minor_version 0
-#define Build_version 2
+#define Build_version 3
 
 //Stepper motor 
 #define SM_STEP_PIN 6
@@ -14,6 +14,7 @@
 //Load cell
 #define PIN_SPI_LOADCELL_MISO 50
 #define LOAD_CELL_CS 7
+#define MAX_LOAD 10000
 
 //
 #define HOME_POSITION 1000
@@ -21,3 +22,5 @@
 //Comms 
 
 #define BAUD_RATE 9600
+
+#define TENSIONPOSITION 1000
