@@ -11,10 +11,12 @@
                 "C:\\Users\\sarah\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.23\\**",
                 "C:\\Users\\sarah\\AppData\\Local\\Arduino15\\packages\\arduino\\tools\\**",
                 "libraries\\**",
-                "C:\\Users\\sarah\\Documents\\Arduino\\libraries\\**"
+                "C:\\Users\\sarah\\Documents\\Arduino\\libraries\\**",
+                "C:\\Users\\sarah\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.3\\**"
             ],
             "forcedInclude": [
-                "C:\\Users\\sarah\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.23\\cores\\arduino\\Arduino.h"
+                "C:\\Users\\sarah\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.6.23\\cores\\arduino\\Arduino.h",
+                "C:\\Users\\sarah\\AppData\\Local\\Arduino15\\packages\\arduino\\hardware\\avr\\1.8.3\\cores\\arduino\\Arduino.h"
             ],
             "defines": [
                 "USBCON"
