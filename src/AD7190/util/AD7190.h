@@ -20,9 +20,9 @@ extern "C" {
 
 /* AD7190 GPIO */
 
-#define AD7190_RDY_STATE       (digitalRead(PIN_SPI_LOADCELL_MISO)) // check state of Port B Input 4 (MISO)
-#define ADI_PART_CS_LOW			digitalWrite(LOAD_CELL_CS, 0)
-#define ADI_PART_CS_HIGH		digitalWrite(LOAD_CELL_CS, 1)
+#define AD7190_RDY_STATE       (digitalRead(50)) // check state of Port B Input 4 (MISO)
+#define ADI_PART_CS_LOW			digitalWrite(7, 0)
+#define ADI_PART_CS_HIGH		digitalWrite(7, 1)
 /* AD7190 Register Map */
 #define AD7190_REG_COMM         0 // Communications Register (WO, 8-bit) 
 #define AD7190_REG_STAT         0 // Status Register         (RO, 8-bit) 

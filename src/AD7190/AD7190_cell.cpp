@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "stdint.h"
 #include "AD7190_cell.h"
 #include "util/AD7190.h"
 
@@ -37,12 +38,12 @@ void AD7190::init()
 {
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
-    SPI2.begin();
+    SPI.begin();
     pinMode(cs, OUTPUT);
     digitalWrite(cs, HIGH);
     uint8_t ret;
     digitalWrite(cs, LOW);
-    SPI2.beginTransaction(spi_settings);
+    SPI.beginTransaction(spi_settings);
     do
     {
         AD7190_Reset();
@@ -71,14 +72,14 @@ void AD7190::init()
 
     setCalibrationFactor(1785);  //g
     setCalibrationFactor(1.785); //mg
-    SPI2.endTransaction();
+    SPI.endTransaction();
     digitalWrite(cs, HIGH);
 }
 
 void AD7190::tare()
 {
     digitalWrite(cs, LOW);
-    SPI2.beginTransaction(spi_settings);
+    SPI.beginTransaction(spi_settings);
     int32_t data_sum = 0;
     uint8_t i;
     int32_t temp;
@@ -126,7 +127,7 @@ void AD7190::tare()
     tare_offset = float(data_sum) / float(i);
     //Serial.print("tare is");
     //Serial.println(tare_offset);
-    SPI2.endTransaction();
+    SPI.endTransaction();
     digitalWrite(cs, HIGH);
 }
 
@@ -135,7 +136,7 @@ uint8_t AD7190::update()
 
     uint32_t result = 0;
     digitalWrite(cs, LOW);
-    SPI2.beginTransaction(spi_settings);
+    SPI.beginTransaction(spi_settings);
     if (!AD7190_RDY_STATE)
     {
         data_index++;
@@ -145,14 +146,14 @@ uint8_t AD7190::update()
         }
         dataSampleSet[data_index] = AD7190_ContinuousRead();
         digitalWrite(cs, HIGH);
-        SPI2.endTransaction();
+        SPI.endTransaction();
         return true;
     }
 
     else
     {
         digitalWrite(cs, HIGH);
-        SPI2.endTransaction();
+        SPI.endTransaction();
         return false;
     }
 }
@@ -176,7 +177,8 @@ float AD7190::getWeight()
         temp += dataSampleSet[i];
         //Serial.println(i);
     }
-    return ((temp / filter_size - tare_offset) / calibrate_factor);
+    //Serial.println(tare_offset);
+    return (((temp / filter_size) - tare_offset) / calibrate_factor);
 }
 
 float AD7190::getRawWeight()
@@ -190,7 +192,7 @@ void AD7190::reboot()
 
     uint8_t ret;
     digitalWrite(cs, LOW);
-    SPI2.beginTransaction(spi_settings);
+    SPI.beginTransaction(spi_settings);
     do
     {
         AD7190_Reset();
@@ -235,7 +237,7 @@ void AD7190::reboot()
     Serial.println(tare_offset);
     //setCalibrationFactor(1785);
     setCalibrationFactor(1.785); //mg
-    SPI2.endTransaction();
+    SPI.endTransaction();
     digitalWrite(cs, HIGH);
     Serial.println("end rebooting");
     delay(2000);
@@ -244,9 +246,9 @@ void AD7190::reboot()
 uint8_t AD7190::getStatus()
 {
     digitalWrite(cs, LOW);
-    SPI2.beginTransaction(spi_settings);
+    SPI.beginTransaction(spi_settings);
     uint8_t ret = AD7190_GetRegisterValue(AD7190_REG_STAT, 1, 1);
-    SPI2.endTransaction();
+    SPI.endTransaction();
     digitalWrite(cs, HIGH);
     return ret;
 }

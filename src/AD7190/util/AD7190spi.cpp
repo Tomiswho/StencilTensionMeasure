@@ -64,7 +64,7 @@ uint8_t SPI_Read(uint8_t* data, uint8_t bytesNumber)
 	for(int i=0;i<n;i++)
 	{
 		//Serial.print(data[i],BIN);
-		data[i] = SPI2.transfer(data[i]);
+		data[i] = SPI.transfer(data[i]);
 		//Serial.print(data[i],BIN);
 		//Serial.print(" ");
 
@@ -78,7 +78,7 @@ uint8_t SPI_Write(uint8_t* data, uint8_t bytesNumber)
 	unsigned int n=bytesNumber;
 	for(int i=0;i<n;i++)
 	{
-		SPI2.transfer(data[i]);
+		SPI.transfer(data[i]);
 		//Serial.println(data[i],BIN);
 	}
 	//Serial.println("leaving write");
