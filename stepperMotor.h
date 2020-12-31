@@ -16,9 +16,10 @@ class StepperMotor{
     public:
         void init(uint8_t step, uint8_t dir);
         void gotoPosition(int32_t target);
-        void setSpeed(int32_t speed);
+        void setSpeed(int32_t speed = 100);
         void stop(void);
         int32_t getPosition(void);
         bool Update(void);
+        void resetPosition(void);
 };
 #endif

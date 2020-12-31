@@ -45,38 +45,28 @@ void StateMachine::init(void){
     //tensionSetisTrue = EEPROM.read(tensionSetisTrueAddr);
     //tensionPosition = EEPROM.read(tensionPositionAddr);
     tensionPosition = TENSIONPOSITION;
-    state = Idle;   
+    motor1.setSpeed(SM_SPEED);
+    state = Calibrate;  
 }
 
 void StateMachine::calibratePosition(void){
-    if(motor1.isMoving == false && isCalibrated == false){
-        if(limitSwitch.read(LS_STEPPER_CALIBRATE_PIN)){
-            motor1.setSpeed(SM_SPEED);
-            motor1.gotoPosition(HOME_POSITION);
-        }
-        else{
-            hasHitLimitSwitch = false;
-            motor1.setSpeed(SM_SPEED);
-            motor1.gotoPosition(INT32_MAX);
-        }
+    if(!limitSwitch.read(LS_STEPPER_CALIBRATE_PIN) && hasHitLimitSwitch == false && isCalibrated == false){
+        motor1.stop();
+        motor1.resetPosition();
+        motor1.setSpeed(SM_SPEED);
+        motor1.gotoPosition(HOME_POSITION);
+        hasHitLimitSwitch = true;
     }
-    else if(motor1.isMoving == true && isCalibrated == false){
-        if(hasHitLimitSwitch == false){
-            if(limitSwitch.read(LS_STEPPER_CALIBRATE_PIN)){
-                motor1.stop();
-                hasHitLimitSwitch = true;
-            }
-        }
-        else{
-            if(motor1.getPosition() >= HOME_POSITION){
-                motor1.stop();
-                isCalibrated = true;
-                state = Idle;
-            }
-        }
+    else if(motor1.isMoving == false && hasHitLimitSwitch == false && isCalibrated == false){
+        motor1.setSpeed(SM_SPEED);
+        motor1.gotoPosition(INT32_MIN);
     }
-    else{
-        state = Error;
+    else if(hasHitLimitSwitch == true){
+        if(motor1.getPosition() == motor1.targetPos){
+            isCalibrated = true;
+            motor1.stop();
+            state = Idle;
+        }
     }
 }
 
@@ -99,7 +89,7 @@ void StateMachine::commandList(void){
             setTensionPosition();
             break;
         case Home:
-            state = Idle;
+            MoveStepper(HOME_POSITION);
             break;
         case GetPosition:
             Serial.println("getPosition");
@@ -112,6 +102,11 @@ void StateMachine::commandList(void){
 
 void StateMachine::run(void){
     MoveStepper(tensionPosition);
+    if(motor1.getPosition() == motor1.targetPos){
+        isCalibrated = true;
+        motor1.stop();
+        state = Idle;
+    }
 }
 
 void StateMachine::idle(void){
@@ -120,7 +115,9 @@ void StateMachine::idle(void){
         Comms.commandisTrue = false;
     }
     else{
-        getTension();
+        if(motor1.isMoving == false){
+          getTension();
+        }
     }
 }
 
