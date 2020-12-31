@@ -31,12 +31,14 @@ void StateMachine::fsm(void){
             run();
         break;
         case Error:
+          Serial.println("ERROR");
         break;
         default:
         break;
         
     }
 }
+
 void StateMachine::init(void){
     Comms.init(BAUD_RATE);
     motor1.init(SM_STEP_PIN, SM_DIR_PIN);
